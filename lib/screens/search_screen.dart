@@ -3,27 +3,8 @@ import 'package:books/widgets/book_list.dart';
 import 'package:books/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends StatelessWidget {
   const SearchScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
-
-class _SearchScreenState extends State<SearchScreen> {
-
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:books/models/book_model.dart';
 import 'package:books/screens/book_detail_screen.dart';
-import 'package:books/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -13,7 +12,8 @@ class BookTile extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(bookModel.title ?? ""),
-        subtitle: Text(bookModel.subtitle ?? ""),
+        subtitle:
+            Text(bookModel.subtitle ?? "", overflow: TextOverflow.ellipsis),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -30,14 +30,14 @@ class BookTile extends StatelessWidget {
             image: bookModel.imageUrl ?? "",
           ),
         ),
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => BookDetailScreen(bookModel: bookModel),
-            ),
-          );
-        },
+        onTap: () => _goToBookDetail(context),
       ),
     );
   }
+
+  _goToBookDetail(BuildContext context) => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => BookDetailScreen(bookModel: bookModel),
+        ),
+      );
 }

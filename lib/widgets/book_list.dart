@@ -12,11 +12,12 @@ class BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<BookList> {
-  final _scrollController = ScrollController();
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
 
     // load more items when user is on the bottom of the list
     _scrollController.addListener(() {

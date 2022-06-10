@@ -27,20 +27,16 @@ class BookDetailScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(kContentPadding),
           child: Column(
-            children: [
-              image,
-              buyButton,
-              _space,
-              title,
-              subtitle,
-              NameValue(name: "Price:", value: bookModel.price ?? ""),
-              NameValue(name: "ISBN:", value: bookModel.isbn13 ?? "")
-            ],
+            children: [image, buyButton, _space, title, subtitle, price, isbn],
           ),
         ),
       ),
     );
   }
+
+  get price => NameValue(name: "Price:", value: bookModel.price ?? "");
+
+  get isbn => NameValue(name: "ISBN:", value: bookModel.isbn13 ?? "");
 
   get title => Text(
         bookModel.title ?? "",

@@ -8,7 +8,8 @@ class BooksProvider extends ChangeNotifier {
   bool canBeLoadMore = true;
   int _page = 1;
   String _query = "";
-  String? errorMessage = "List is empty"; //default error message before first search
+  String? errorMessage =
+      "List is empty"; //default error message before first search
 
   set query(String query) {
     _query = query;
@@ -31,11 +32,13 @@ class BooksProvider extends ChangeNotifier {
   loadMoreBooks() async {
     final response = await BookApi.getBooks(_query, _page);
 
-    canBeLoadMore = response?.total != 0 ;
+    canBeLoadMore =
+        response?.total != 0 && response?.books.length != response?.total;
+
     errorMessage =
         response?.total == 0 && books.isEmpty ? "No books found!" : null;
 
-    if (response != null && canBeLoadMore) {
+    if (response != null && response.total != 0) {
       books.addAll(response.books);
       _incrementPage();
     }
