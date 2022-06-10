@@ -22,34 +22,51 @@ class _BookListState extends State<BookList> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        context.read<BooksProvider>().searchBooks();
+        context.read<BooksProvider>().loadMoreBooks();
       }
     });
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: (context.watch<BooksProvider>().books.isEmpty == true)
-          ? const Center(
-              child: Text("List is empty"),
-            )
-          : ListView.builder(
-              controller: _scrollController,
-              shrinkWrap: true,
-              itemCount: context.watch<BooksProvider>().books.length + 1,
-              itemBuilder: (context, index) {
-                return (context.watch<BooksProvider>().books.length == index)
-                    ? const Center(
-                        child: Padding(
-                        padding: EdgeInsets.all(kContentPadding),
-                        child: CircularProgressIndicator.adaptive(),
-                      ))
-                    : BookTile(
-                        bookModel: context.watch<BooksProvider>().books[index],
-                      );
-              },
-            ),
-    );
+        child: (context.watch<BooksProvider>().errorMessage != null)
+            ? _errorState
+            : (context.watch<BooksProvider>().loading == true)
+                ? _loadingState
+                : _listView);
   }
+
+  get _errorState => Center(
+        child: Text(
+            context.watch<BooksProvider>().errorMessage ?? "Unexpected error"),
+      );
+
+  get _loadingState => const Center(
+        child: Padding(
+          padding: EdgeInsets.all(kContentPadding),
+          child: CircularProgressIndicator.adaptive(),
+        ),
+      );
+
+  get _listView => ListView.builder(
+        controller: _scrollController,
+        shrinkWrap: true,
+        itemCount: context.watch<BooksProvider>().books.length + 1,
+        itemBuilder: (context, index) {
+          return (context.watch<BooksProvider>().books.length == index)
+              ? (context.watch<BooksProvider>().canBeLoadMore)
+                  ? _loadingState
+                  : Container()
+              : BookTile(
+                  bookModel: context.watch<BooksProvider>().books[index],
+                );
+        },
+      );
 }
